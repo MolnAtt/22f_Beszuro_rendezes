@@ -34,6 +34,38 @@ namespace _22f_Beszuro_rendezes
 			}
 		}
 
+
+		static void Beszuro_Rendezes_Igazi<T>(List<T> t, Func<T, T, int> r)
+		{
+			for (int i = 1; i < t.Count; i++)
+			{
+				Áthelyez(t, i, Helye_eddig(t, t[i], i, r));
+			}
+		}
+
+		static int Helye_eddig<T>(List<T> t, T elem, int eddig, Func<T, T, int> r)
+		{
+			int j = 0;
+			while (j < eddig && r(t[j], elem) < 1)
+			{
+				j++;
+			}
+			return j;
+		}
+
+		static void Áthelyez<T>(List<T> t, int innen, int ide)
+		{
+			T temp = t[innen];
+			for (int i = innen; ide < i; i--)
+			{
+				t[i] = t[i - 1];
+			}
+			t[ide] = temp;
+		}
+
+
+
+
 		static Random r = new Random();
 		static List<int> Véletlen_lista(int maxhossz, int mettol, int meddig)
 		{
@@ -73,8 +105,8 @@ namespace _22f_Beszuro_rendezes
 				//List<int> masolat = eredeti; // ez nagyon nem jó! így nem jön létre új lista! Ez csak a címet másolja le! // ezzel az lett volna, hogy az eredeti rendezésével a másik is ugyanolyan rendezett lett volna. 
 				List<int> masolat = new List<int>(eredeti); // a new kell ahhoz, hogy új dolog jöjjön létre
 				eredeti.Sort(); // ez a C# beépített rendezése
-				Beszuro_Rendezes(masolat);
-				if (!Megegyeznek(eredeti, masolat))
+				Beszuro_Rendezes_Igazi(masolat, (x,y) => x.CompareTo(y));
+  				if (!Megegyeznek(eredeti, masolat))
 				{
 					Console.WriteLine("Ezek nem stimmelnek!");
 					Console.WriteLine($"rendezetlen: [{String.Join(", ", rendezetlen)}]");
@@ -101,7 +133,7 @@ namespace _22f_Beszuro_rendezes
 			Console.WriteLine("Rendezett lista (?):");
 			Console.WriteLine($"[{String.Join(", ", lista)}]");
 			*/
-			Teszt(1000000);
+			Teszt(10000);
 
 			Console.ReadKey();
 
